@@ -1,0 +1,23 @@
+<pre>
+Get:{{request.GET}}
+<br>
+Post:{{request.POST}}
+<br>
+
+
+
+<span>Search:</span>
+<form action="/state_search/" method="POST">
+{% csrf_token %}
+<input name="random_name" type="text">
+    
+</form>
+{% for state in states%}
+<a href="/state_detail/{{state.pk}}/">{{state.name}}</a>
+
+{% endfor %}
+<br>
+
+
+
+</pre>

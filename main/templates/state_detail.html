@@ -1,0 +1,16 @@
+<h3>{{state.name}}</h3>
+
+{% comment %}
+<p>Capital:{{state.statecapital_set.all.first.name}}</p>
+<p>Population:{{state.statecapital_set.all.first.pop}}</p>
+<p>Longitude:{{state.statecapital_set.all.first.lon}}</p>
+<p>Latitude:{{state.statecapital_set.all.first.lat}}</p>
+<p>{{state.statecapital_set.all}}</p>
+{% endcomment %}
+
+<h3>Capital:</h3>{{state.statecapital.name}}</br>
+    Population: {{state.statecapital.pop}}</br>
+    Longitude: {{ state.statecapital.lon}}</br>
+    Latitude: {{ state.statecapital.lat}}</br>
+
+
