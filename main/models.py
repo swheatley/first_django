@@ -2,7 +2,7 @@ from django.db import models
 
 
 class State(models.Model):
-    name = models.CharField(max_length=255, unique=True)
+    name = models.CharField(max_length=255, null=True)
     abbrev = models.CharField(max_length=2, null=True, blank=True)
     
     def __unicode__(self):

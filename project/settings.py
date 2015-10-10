@@ -14,7 +14,7 @@ https://docs.djangoproject.com/en/1.8/ref/settings/
 import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TEMPLATE_DIRS = os.path.join(BASE_DIR, 'templates')
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -37,8 +37,11 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'crispy_forms',
     'main',
-)
+ )
+CRISPY_TEMPLATE_PACK = 'bootstrap3'   
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -79,7 +82,7 @@ DATABASES = {
         'NAME': 'first_django',
         'HOST': '127.0.0.1',
         'USER': 'root',
-        'PASSWORD': '1jjackson!',
+        'PASSWORD':'1jjackson!',
         'PORT':''
     }
 }
@@ -102,8 +105,14 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.8/howto/static-files/
 
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'static')  
-MEDIA_URL = ‘/media/’  
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')  
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = '587'
+
+EMAIL_HOST_USER = 'shayleewheatley@gmail.com'
+EMAIL_HOST_PASSWORD = '1jjackson!'
+EMAIL_USE_TLS = True

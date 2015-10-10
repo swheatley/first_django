@@ -1,0 +1,14 @@
+<form method="POST" action="/StateCapital_create/">  
+    {% csrf_token %}
+
+    {{ form.as_table }}
+
+    <input type="submit" value="Save" />
+
+</form>
+
+
+</br>  
+</br>
+
+{{ valid }}

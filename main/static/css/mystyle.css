@@ -1,0 +1,16 @@
+h2{
+    font-weight: bolder;
+}
+
+a{
+    
+    
+    color: black;
+
+
+}
+
+a:hover{
+    color: red;
+    text-decoration: none;
+}

@@ -3,40 +3,46 @@
 import csv
 import sys
 import os
-
 sys.path.append('..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
+import django
+django.setup()
+from main.models import City, State
 
 
-from main.models import State, StateCapital, City
+# states = State.objects.all()
+
+# for state in states:
+# print state.name
 
 print os.path.abspath(__file__)
 
-csv_file_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "zip_codes_states.csv") 
+# print os.path.dirname(os.path.abspath(__file__))
+dir_name = os.path.dirname(os.path.abspath(__file__))
+file_name = "cities.csv"
 
-csv_file_path = open(cities_csv, 'r')
+# print "%s/%s" % (dir_name, file_name)
 
-reader = csv.DictReader(csv_file_path)
+# print os.path.join(dir_name, file_name)
+
+cities_csv = os.path.join(dir_name, file_name)
+
+csv_file = open(cities_csv, 'r')
+
+reader = csv.DictReader(csv_file)
 
 for row in reader:
-   
-
-
     new_city, created = City.objects.get_or_create(name=row['city'])
-
+    new_city.zip_code = row['zip_code']
+    new_city.lat = row['latitude']
+    new_city.lon = row['longitude']
     new_city.county = row['county']
-    new_city.latitude = row['latitude']
-    new_city.zip_code = row['zip_code'] 
-    new_city.longitude = row['longitude'] 
-    try:
-        state = State.objects.get(abbrev=row['state'])
-        new_city.state = state
-    except Exception, e:
-        print e
+    new_city.save()
 
-    try:
-        new_city.save()
-    except Exception, e:
-        print e
+    # new_capital, created = StateCapital.objects.get_or_create(name=row['capital'])
+    # new_capital.lat = row['latitude']
+    # new_capital.lon = row['longitude']
+    # new_capital.coun = row['county']
 
-    
+    new_city.state = new_city
+    new_city.save()

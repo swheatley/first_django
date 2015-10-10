@@ -1,0 +1,39 @@
+{% extends "base.html"%}
+{% load staticfiles %}
+
+
+
+
+{% block body %}
+    <div class="container">
+
+        <div class="row">
+            <div class="box">
+                <div class="col-lg-12">
+                    <hr>
+                    <div class="intro-text text-center"></div>
+                        <h2>List of Cities</h2>
+                    <hr>
+                
+                    {% for state in states %}
+                            <div class="col-lg-12 text-center">
+                            {% for city in state.cities_set.all|slice:":30" %}
+                                {{city}}
+                            {%endfor%}
+                    {% endfor%}
+                            </div>
+                    </div>      
+                   
+                </div>
+            </div>
+        </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+        

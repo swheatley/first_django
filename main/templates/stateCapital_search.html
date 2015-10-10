@@ -1,12 +1,23 @@
-<h2>This is a list</h2></br>
-{{stateCapital}}
+<pre>
+Get:{{request.GET}}
+<br>
+Post:{{request.POST}}
+<br>
 
-</br>
 
-<h2>This is looping through the list</h2></br>
-    {% for stateCapital in stateCaptials %}   
-    <a href="/stateCapital_search/{{stateCapital.pk}}"/>{{stateCapital}}</a>
-    {{stateCapital.pk}}
+
+<span>Search:</span>
+<form action="/stateCapital_search/" method="POST">
+{% csrf_token %}
+<input name="random_name" type="text">
     
-    
+</form>
+{% for stateCapital in stateCapitals%}
+<a href="/stateCapital_detail/{{state.pk}}/">{{stateCapital.name}}</a>
+
 {% endfor %}
+<br>
+
+
+
+</pre>

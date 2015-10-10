@@ -1,13 +1,37 @@
-{{city}}
+{% extends "base.html"%}
+{% load staticfiles %}
 
-<h4>City Name:</h4>  
-{{ city.name }}
 
-<h4>State:</h4>  
-{{ city.state }}
+{% block body %}
 
-<h4>County:</h4>  
-{{ city.county }}
+<div class="container">
+    <div class="row">
+        <div class="col-md-6">
 
-<h4>Latitude & Longitude:</h4>  
-{{ city.longitude }} | {{ city.latitude }}
+        {% if city.state %}
+    <a href="/city_detail/"><h2>State: {{ city.name }}</h2></a>
+{% endif %} 
+
+<a href="/state_list/"><h1> County: {{ statecapital.name }}</h1></a>
+
+    </div>
+        </div>
+
+<!-- Below is what is passed through the context -->
+    <div class="row">
+        <div class="col-md-6">
+        <a href="/state_list/"><h1> City: {{cities.name}}</h1></a>
+    </div>
+        </div>
+
+
+
+
+
+
+
+{%  endblock %}
+
+
+
+</div>
