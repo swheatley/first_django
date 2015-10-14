@@ -74,7 +74,7 @@ def state_detail(request, pk):
     context = {}
 
     state = State.objects.get(pk=pk)
-
+    
     context['state'] = state
 
     return render_to_response('state_detail.html', context, context_instance=RequestContext(request))
