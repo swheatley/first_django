@@ -9,7 +9,9 @@ import django
 django.setup()
 from main.models import City, State
 
+City.objects.all().delete()
 
+states = State.objects.all()
 # states = State.objects.all()
 
 # for state in states:
@@ -32,17 +34,36 @@ csv_file = open(cities_csv, 'r')
 reader = csv.DictReader(csv_file)
 
 for row in reader:
-    new_city, created = City.objects.get_or_create(name=row['city'])
+    try:
+        state_obj = State.objects.get(abbrev=row['state'])
+    except:
+        print row['state']
+
+
+    new_city, created = City.objects.get_or_create(name=row['city'], state=state_obj)
     new_city.zip_code = row['zip_code']
     new_city.lat = row['latitude']
     new_city.lon = row['longitude']
     new_city.county = row['county']
     new_city.save()
 
+    try:
+        new_city.save()
+    except Exception, e:
+        print e
+        print new_city.county
+        print new_city.latitude
+        print new_city.longitude
+
+    print new_city.name
+    print created
     # new_capital, created = StateCapital.objects.get_or_create(name=row['capital'])
     # new_capital.lat = row['latitude']
     # new_capital.lon = row['longitude']
     # new_capital.coun = row['county']
 
-    new_city.state = new_city
-    new_city.save()
+    # new_city.state = new_city
+    try:
+        new_city.save()
+    except Exception, e:
+        print "major fail"    
