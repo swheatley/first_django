@@ -41,6 +41,7 @@ for row in reader:
 
 
     new_city, created = City.objects.get_or_create(name=row['city'], state=state_obj)
+    
     new_city.zip_code = row['zip_code']
     new_city.lat = row['latitude']
     new_city.lon = row['longitude']

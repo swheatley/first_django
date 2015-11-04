@@ -1,5 +1,5 @@
 from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from main.models import State, City, StateCapital
 from main.forms import ContactForm, CityEditForm, CityEditForm
 from django.template import RequestContext
@@ -14,6 +14,22 @@ from django.conf import settings
 #edit view
 #delete view
 #make the view --> make the url
+
+def ajax_search(request):
+    context = {}
+    return render_to_response('ajax_search.html', context, context_instance=RequestContext(request))
+
+
+def json_response(request):
+    search_string = request.GET.get('search', '')
+    objects = State.objects.filter(name__icontains=search_string)
+
+    object_list = []
+
+    for obj in objects:
+        object_list.append(obj.name)
+
+    return JsonResponse(object_list, safe=False)
 
 
 # STATE VIEWS:

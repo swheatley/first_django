@@ -36,7 +36,6 @@ for link in links:
     #use a get instead of a filter to find the state object
     state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
 
-
     state_page = urllib.urlopen("http://www.50states.com/%s" % link)
 
     state_page_html = state_page.read()
@@ -46,27 +45,13 @@ for link in links:
     state_population_xpath = "//*[@id='collapseQuick-Facts']/div/ul/li[6]/div/text()"
 
     state_population_string = tree.xpath(state_population_xpath)
-    
-    cleaned_string = ''
-    
 
-    for letter in state_population_string:
-            if letter ==  :
-             cleaned_string = cleaned_string + letter
-        
-        
-
-#return int(value)
-#ValueError: invalid literal for int() with base 10: "['4,833,722; Rank: 23 of 50 | ']"
-
-    # how can I clean up this string so the regex is more simple?
-    # ['735,132; Rank: 47 of 50 | ', '\r\n\r\n']
-    # look at strip and replace to clean up this string
+    #how can I clean up this string so the regex is more simple?
+    #['735,132; Rank: 47 of 50 | ', '\r\n\r\n']
+    #look at strip and replace to clean up this string
     # print state_population_string
-    state_population_pattern = "(.+)"
+    state_population_pattern = "\d+,\d+,\d+"
     cleaned_pop_string = re.search(state_population_pattern, '%s' % state_population_string)
-
-    
 
     try:
         # print cleaned_pop_string.group()

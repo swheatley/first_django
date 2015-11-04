@@ -22,6 +22,7 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
     
+    url(r'^$', 'main.views.state_list'),
     url(r'^state_list/$', 'main.views.state_list'),
     url(r'^state_search/$', 'main.views.state_search'),
     url(r'^state_create/$', 'main.views.state_create'),
@@ -50,5 +51,8 @@ urlpatterns = [
    
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),
+
+    url(r'^ajax_search/$', 'main.views.ajax_search'),
+    url(r'^json_response/$', 'main.views.json_response'),
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
