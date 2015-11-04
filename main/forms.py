@@ -6,6 +6,7 @@ from crispy_forms.bootstrap import FormActions
 from main.models import City
 
 
+
 class ContactForm(forms.Form):
     name = forms.CharField(required=True)
     email = forms.CharField(required=True) 
@@ -22,8 +23,6 @@ class ContactForm(forms.Form):
                 Div('name', 'email', 'phone', css_class = 'col-md-6'),
                 Div('message' , css_class = 'col-md-6')
             )
-
-
 
         self.helper.layout.append(
             FormActions(
@@ -59,5 +58,11 @@ class CityEditForm(forms.ModelForm):
 #         super(StateCapitalEditForm, self). __init__(*args, **kwargs
 
 
+class UserSignUp(forms.Form):
+    email = forms.EmailField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
 
 
+class UserLogin(forms.Form):
+    username = forms.CharField(required=True)
+    password = forms.CharField(required=True, widget=forms.PasswordInput())

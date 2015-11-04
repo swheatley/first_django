@@ -32,7 +32,7 @@ urlpatterns = [
 
 
     url(r'^city_list/$', 'main.views.city_list'),
-    url(r'^city_search/$', 'main.views.city_search'),
+    url(r'^city_search/(?P<pk>\d+)/$', 'main.views.city_search'),
     url(r'^city_create/$', 'main.views.city_create'),
     url(r'^city_detail/(?P<pk>\d+)/$', 'main.views.city_detail'),
     url(r'^city_edit/(?P<pk>\d+)/$', 'main.views.city_edit'),
@@ -48,6 +48,9 @@ urlpatterns = [
     
     
     url(r'^contact_view/$', 'main.views.contact_view'),
+    url(r'^signup/$', 'main.views.signup'),
+    url(r'^login_view/$', 'main.views.login_view'),
+    url(r'^logout_view/$', 'main.views.logout_view'),
    
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),

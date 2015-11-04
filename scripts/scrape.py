@@ -29,6 +29,7 @@ filtered_html = tree.xpath(href_xpath)
 links = [link for link in filtered_html if 'htm' in link]
 
 for link in links:
+    print "loop"
     state_name_pattern = "(?<=\W).*(?=.htm)"
     state_name_search = re.search(state_name_pattern, link)
     state_name = "%s" % state_name_search.group()
@@ -49,10 +50,9 @@ for link in links:
     
     cleaned_string = ''
     
-
     for letter in state_population_string:
-            if letter ==  :
-             cleaned_string = cleaned_string + letter
+        if letter == '':
+            cleaned_string = cleaned_string + letter
         
         
 

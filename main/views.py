@@ -2,6 +2,7 @@ from django.shortcuts import render, render_to_response, redirect
 from django.http import HttpResponse, JsonResponse
 from main.models import State, City, StateCapital
 from main.forms import ContactForm, CityEditForm, CityEditForm
+from django.contrib.auth import authenticate, login, logout
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.conf import settings
@@ -122,20 +123,15 @@ def city_list(request):
     return render_to_response('city_list.html', context, context_instance=RequestContext(request))   
 
 
-def city_search(request):
+def city_search(request, pk):
     
     context = {}
 
     context['request'] = request
 
-    city = request.GET.get('city', None)
+    state = State.objects.get(pk=pk)
 
-    if city != None:
-        cities = City.objects.filter(name__icontains=city)
-    else:
-        cities = City.objects.all() 
-
-    context['cities'] = cities
+    context['state'] = state
 
     return render_to_response('city_search.html', context, context_instance=RequestContext(request))
 
@@ -260,14 +256,13 @@ def stateCapital_list(request):
 #     return render_to_response('StateCapital_search.html', context, context_instance=RequestContext(request))
 
 
-
 def stateCapital_detail(request, pk):
 
     context = {}
 
     state_capital = StateCapital.objects.get(pk=pk)
 
-    context['statecapital'] = state_capital 
+    context['state_capital'] = state_capital 
 
     return render_to_response('StateCapital_detail.html', context, context_instance=RequestContext(request))
 
@@ -387,5 +382,71 @@ def contact_view(request):
 
     #@csrf_exempt
     #def get_post(request):
+
+#Permissions Views
+
+
+def signup(request):
+    context = {}
+
+    form = UserSignUp()
+    context['form'] = form
+
+    if request.method == 'POST':
+        form = UserSignUp(request.POST)
+        if form.is_valid():
+            print form.cleaned_data
+
+            name = form.cleaned_data['name']
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            try:
+                new_user = User.objects.create_user(name, email, password)
+                context['valid'] = "Thank You For Singing Up!"
+
+                auth_user = authenticate(username=name, password=password)
+                login(request, auth_user)
+
+                return HttpResponseRedirect('/list_view/')
+
+            except IntegrityError, e:
+                context['valid'] = "A User With That Name Already Exists"
+        else:
+            context['valid'] = form.errors
+    if request.method == "GET":
+        context['valid'] = "Please Sign Up!"
+    return render_to_response('signup.html', context, context_instance=RequestContext(request))
+
+
+def login_view(request):
+
+    context = {}
+
+    context['form'] = UserLogin()
+
+    username = request.POST.get('username', None)
+    password = request.POST.get('password', None)
+
+    auth_user = authenticate(username=username, password=password)
+
+    if auth_user is not None:
+        if auth_user.is_active:
+            login(request, auth_user)
+            context['valid'] = "Login Successful"
+
+            return HttpResponseRedirect('/home/')
+        else:
+            context['valid'] = "Invalid User"
+    else:
+        context['valid'] = "Please enter a User Name"
+    return render_to_response('login_view.html', context, context_instance=RequestContext(request))
+
+
+def logout_view(request):
+    logout(request)
+
+    return HttpResponseRedirect('/login_view/')
+
 
 

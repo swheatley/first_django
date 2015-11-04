@@ -6,8 +6,6 @@
 
 {% block body %}
     <div class="container">
-
-        <div class="row">
             <div class="box">
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                     <hr>
@@ -18,33 +16,18 @@
                 </div>
 
                 {% for state in states %}
-                <div class="col-lg-12 text-center">
-                    {% comment %}
-                    <img class="img-responsive img-border img-full" src="{% static 'img/slide-1.jpg' %}" alt="">
-                    {% endcomment %}
-                    <h2>State: <a href="/state_search/">{{ state.name }}</a></h2>
-                        
-                    
-                    <h2>Cities:<a href="/city_search/{{ city.pk }}" class="btn btn-default btn-lg" type="submit">SELECT</a></h2>
-                        {% for city in state.city_set.all|slice:":30" %}
-                           {{ city }}
-                        {% endfor %}
-                        <br>
-
-                        <h2>Capital: {{ state.statecapital }}</h2>
-                    
-                        <br>
-                    
-                    {% comment %}
-                        {% for city in state.city_set.all|slice:":30" %}
-                            {{ city }}
-                        {% endfor %}
-                    {% endcomment %}
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                    <div class="row">
+                        <h2>State: <a href="/state_search/">{{ state.name }}</a></h2>
+                        <h2>Cities: <a href="/city_search/{{ state.pk }}/" class="btn btn-default btn-lg" type="submit"> SELECT</a></h2>
+                        <h2>Capital: <div id="capital">{{ state.statecapital }}</h2>
                     <br>
-
-                    <a href="/StateCapital_detail/{{ state.statecapital.pk }}" class="btn btn-default btn-lg">Map</a>
+                    <br>
+                        <a href="/StateCapital_detail/{{ state.statecapital.pk }}" class="btn btn-default btn-lg">Map</a>
                     <hr>
-                    {% endfor %}
+                    
+                </div>
+                {% endfor %}
             </div>
         </div>
 
