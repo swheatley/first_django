@@ -18,6 +18,10 @@ from django.contrib import admin
 from django.conf import settings  
 from django.conf.urls.static import static
 
+from main.forms import CustomUserCreationForm
+from django.contrib.auth import views as auth_views
+from main import views
+
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
 
@@ -49,8 +53,9 @@ urlpatterns = [
     
     url(r'^contact_view/$', 'main.views.contact_view'),
     url(r'^signup/$', 'main.views.signup'),
-    url(r'^login_view/$', 'main.views.login_view'),
+    url(r'^login/$', 'main.views.login_view'),
     url(r'^logout_view/$', 'main.views.logout_view'),
+    #url(r'^register/$', CreateView)
    
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),

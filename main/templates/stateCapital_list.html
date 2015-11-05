@@ -22,10 +22,11 @@
                     {% comment %}
                     <img class="img-responsive img-border img-full" src="{% static 'img/slide-1.jpg' %}" alt="">
                     {% endcomment %}
-                    <h2>{{ statecapital.name }}</h2>
-                        <br>
-                        <small>{{ state.statecapital }}</small>
-                    </h2>
+                    <div class="city_name">
+                        <h2>{{ statecapital.name }}</h2>
+                    </div>
+                    <br>
+                    
                    <p>
                         {% for statecapital in state.statecapital_set.all|slice:":30" %}
                             {{ city }}

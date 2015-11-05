@@ -1,19 +1,21 @@
-{% extends "base.html %}
+{% extends 'base.html' %}
 
 {% block body %}
 
-    <form action="/signup/" method="POST">
+    <form action="{% url 'singup_view' %}" method="POST">
         {% csrf_token %}
 
         {{form.as_p}}
 
-        <input type="submit", value="Sign Up!">
+        <input type="submit", value="login">
+        <input type="hidden" names="next" vlaues={{'next'}}/>
 
     </form>
 
     <br>
 
     {{ valid }}
+    {{form.errors}}
 
 {% endblock %}
 

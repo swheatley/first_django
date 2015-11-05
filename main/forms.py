@@ -1,10 +1,11 @@
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm
+from main.models import City, CustomUser
 from django import forms 
+
 #from django.core.validators import RegexValidator
 from crispy_forms.helper import FormHelper 
 from crispy_forms.layout import Submit, HTML, Layout, Div
 from crispy_forms.bootstrap import FormActions
-from main.models import City
-
 
 
 class ContactForm(forms.Form):
@@ -57,12 +58,33 @@ class CityEditForm(forms.ModelForm):
 #     def __init__ (self, *args, **kwargs):
 #         super(StateCapitalEditForm, self). __init__(*args, **kwargs
 
+class CustomUserCreationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomUserCreationForm, self).__init__(*args, **kwargs)
+
+        class Meta:
+            model = CustomUser
+            fields = ['email']
+            exclude = ['username']
+
+
+class CustomUserChangeForm(UserChangeForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomUserhangeForm, self).__init(*args, **kwargs)
+        #del self.fields['username']
+
+    class Meta:
+        model = CustomUser
+        fields = ['email', 'password']
+        exlcude = ['username']
+
 
 class UserSignUp(forms.Form):
-    email = forms.EmailField(required=True)
+    name = forms.CharField(required=True)
+    email = forms.CharField(required=True)
     password = forms.CharField(widget=forms.PasswordInput(), required=True)
 
 
 class UserLogin(forms.Form):
-    username = forms.CharField(required=True)
+    email = forms.CharField(required=True)
     password = forms.CharField(required=True, widget=forms.PasswordInput())

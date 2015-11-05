@@ -1,11 +1,16 @@
-from django.shortcuts import render, render_to_response, redirect
-from django.http import HttpResponse, JsonResponse
-from main.models import State, City, StateCapital
-from main.forms import ContactForm, CityEditForm, CityEditForm
-from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import render, render_to_response
+from django.http import HttpResponseRedirect, JsonResponse
+
+from main.models import State, City, StateCapital, CustomUserManager, CustomUser
+from main.forms import ContactForm, CityEditForm, CityEditForm, UserSignUp, UserLogin
+
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.conf import settings
+
+from django.contrib.auth import authenticate, login, logout
+from django.db import IntegrityError
+
 
 
 
@@ -383,39 +388,41 @@ def contact_view(request):
     #@csrf_exempt
     #def get_post(request):
 
+
 #Permissions Views
 
 
 def signup(request):
+    
     context = {}
 
     form = UserSignUp()
     context['form'] = form
 
     if request.method == 'POST':
+
         form = UserSignUp(request.POST)
         if form.is_valid():
-            print form.cleaned_data
+            #print form.cleaned_data
 
             name = form.cleaned_data['name']
             email = form.cleaned_data['email']
             password = form.cleaned_data['password']
 
             try:
-                new_user = User.objects.create_user(name, email, password)
-                context['valid'] = "Thank You For Singing Up!"
+                new_user = CustomUser.objects.create_user(email, password)
 
-                auth_user = authenticate(username=name, password=password)
+                auth_user = authenticate(email=email, password=password)
+
                 login(request, auth_user)
 
-                return HttpResponseRedirect('/list_view/')
+                return HttpResponseRedirect('/')
 
             except IntegrityError, e:
                 context['valid'] = "A User With That Name Already Exists"
         else:
             context['valid'] = form.errors
-    if request.method == "GET":
-        context['valid'] = "Please Sign Up!"
+
     return render_to_response('signup.html', context, context_instance=RequestContext(request))
 
 
@@ -425,28 +432,34 @@ def login_view(request):
 
     context['form'] = UserLogin()
 
-    username = request.POST.get('username', None)
-    password = request.POST.get('password', None)
+    #username = request.POST.get('username', None)
+    #password = request.POST.get('password', None)
 
-    auth_user = authenticate(username=username, password=password)
+    #auth_user = authenticate(email=email, password=password)
 
-    if auth_user is not None:
-        if auth_user.is_active:
-            login(request, auth_user)
-            context['valid'] = "Login Successful"
+    if request.method == 'POST': 
+        form = UserLogin(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data ['[password']
 
-            return HttpResponseRedirect('/home/')
+            auth_user = authenticate(email=email, password=password)
+
+            if auth_user is not None:
+                login(request, auth_user)
+
+            return HttpResponseRedirect('/')
         else:
             context['valid'] = "Invalid User"
     else:
         context['valid'] = "Please enter a User Name"
-    return render_to_response('login_view.html', context, context_instance=RequestContext(request))
+    return render_to_response('login.html', context, context_instance=RequestContext(request))
 
 
 def logout_view(request):
     logout(request)
 
-    return HttpResponseRedirect('/login_view/')
+    return HttpResponseRedirect('/')
 
 
 
