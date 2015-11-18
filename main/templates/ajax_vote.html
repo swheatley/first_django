@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Voting</title>
+</head>
+<body>
+
+    <h1>VOTING!!!</h1>
+
+        <div class="vote">
+            <a class="upvote" href="/vote/{{state.pk}}/?vote_type=up">Vote Up ({{state.upvotes.all.count}} )</a> |
+            <a class="downvote" href="/vote/{{state.pk}}/?vote_type=down">Vote Down ({{state.downvotes.all.count}})</a>
+        </div>                  
+
+</body>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script type="text/javascript">
+<script>
+    $(document).ready(function(){
+        $('.upvote', downvote).css('cursor', 'pointer);
+        $(".vote").click(function(){
+             if($(this).hasClass('selected')){
+            $.post('myurl', {params:params}, function(response){
+                $(this).removeAttr('src')
+                   .attr('src',"...") # how to get the template {% static %} path?
+                   .removeClass('selected');
+            });
+        }else{
+            # when vote isn't selected
+        }
+    });
+});
+
+
+
+        })
+            $.ajax({
+                type: 'GET',
+                url: '/json_response/',
+                data: {search: $('a').val()},
+                error: function(){
+
+                },
+                success: function(data){
+                    console.log(data[0]);
+                    for(i=0; i<data.length; i++){
+                        $("").append('' + data[i] +  '' )
+                    }
+                }
+
+
+
+
+            });
+
+
+        });
+    });
+
+</script>
+
+</html>

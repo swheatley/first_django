@@ -1,15 +1,15 @@
 from django.shortcuts import render, render_to_response
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
-from main.models import State, City, StateCapital, CustomUserManager, CustomUser
-from main.forms import ContactForm, CityEditForm, CityEditForm, UserSignUp, UserLogin
+from main.models import State, City, StateCapital, CityCas
+from main.forms import ContactForm, CityEditForm, CityEditForm
 
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.conf import settings
 
-from django.contrib.auth import authenticate, login, logout
-from django.db import IntegrityError
+from django.contrib.auth.models import User
+import string
 
 
 
@@ -21,9 +21,130 @@ from django.db import IntegrityError
 #delete view
 #make the view --> make the url
 
+
+
+def city_list_cas(request):
+
+    context = {}
+
+    city_list = CityCas.objects.all()
+
+    context['city_list'] = city_list
+
+    return render_to_response('city_list_cas.html', context, context_instance=RequestContext(request))
+
+
+
+
+def api_city_list(request):
+
+    cities = City.objects.all()
+
+    api_dict = {}
+
+    city_list = []
+
+    api_dict['cities'] = city_list
+
+    for city in cities:
+        city_list.append({'name': city.name, 'county': city.county})
+
+    return JsonResponse(api_dict)
+
+
+def ajax_city_list(request):
+
+    context = {}
+
+    return render_to_response('ajax_city_list.html', context, context_instance=RequestContext(request))
+
+
+def api_state_list(request):
+
+    states = State.objects.all()
+
+    api_dict = {}
+
+    state_list = []
+
+    api_dict['states'] = state_list
+
+    for state in states:
+        cities = state.city_set.all()[:30]
+
+        city_list = []
+
+        for city in cities:
+            city_list.append({'name': city.name, 'pk': city.pk})
+        try:
+            state_list.append({'name': state.name, 
+                               'abbrev': state.abbrev, 
+                               'map': state.state_map.url, 
+                               'capital': state.statecapital.name, 
+                               'votes': state.votes,
+                               'pk': state.pk,
+                               #'cities': [city for city in state.city_set.all()[:30]
+                               'cities': city_list
+                               })
+            
+        except:
+            pass
+
+    return JsonResponse(api_dict)
+
+
+def ajax_state_list(request):
+
+    context = {}
+
+    return render_to_response('ajax_state_list.html', context, context_instance=RequestContext(request))
+
+
+def vote(request, pk):
+
+    vote_type = request.GET.get('vote_type', None)
+
+    user = User.objects.get(pk=request.user.pk)
+    state = State.objects.get(pk=pk)
+    userprofile = user.userprofile
+
+    if vote_type == "up":
+        if userprofile in state.downvotes.all():
+            state.downvotes.remove(userprofile)
+
+        state.upvotes.add(userprofile)
+
+    if vote_type == "down":
+        if userprofile in state.upvotes.all():
+            state.upvotes.remove(userprofile)
+
+        state.downvotes.add(userprofile)
+
+    #return HttpResponse('UpVote: %s, DownVotes: %s' % (state.upvotes.all().count(), state.downvotes.all().count()))  
+
+    return HttpResponseRedirect('/state_list/')
+
+
+def state_list(request):
+
+    context = {}
+
+    states = State.objects.all().order_by('-votes')
+
+    context['states'] = states
+
+    #template --> context dictionary --> context_instance variable
+    return render_to_response('state_list.html', context, context_instance=RequestContext(request))
+
+
 def ajax_search(request):
     context = {}
     return render_to_response('ajax_search.html', context, context_instance=RequestContext(request))
+
+
+def ajax_vote(request):
+    context = {}
+    return render_to_response('ajax_vote.html', context, context_instance=RequestContext(request))
 
 
 def json_response(request):
@@ -40,18 +161,6 @@ def json_response(request):
 
 # STATE VIEWS:
 
-def state_list(request):
-
-    context = {}
-
-    states = State.objects.all()
-
-    context['states'] = states
-
-    #template --> context dictionary --> context_instance variable
-    return render_to_response('state_list.html', context, context_instance=RequestContext(request))
-
-    
 
 def state_search(request):
 
@@ -392,74 +501,74 @@ def contact_view(request):
 #Permissions Views
 
 
-def signup(request):
+# #def signup(request):
     
-    context = {}
+#     context = {}
 
-    form = UserSignUp()
-    context['form'] = form
+#     form = UserSignUp()
+#     context['form'] = form
 
-    if request.method == 'POST':
+#     if request.method == 'POST':
 
-        form = UserSignUp(request.POST)
-        if form.is_valid():
-            #print form.cleaned_data
+#         form = UserSignUp(request.POST)
+#         if form.is_valid():
+#             #print form.cleaned_data
 
-            name = form.cleaned_data['name']
-            email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
+#             name = form.cleaned_data['name']
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data['password']
 
-            try:
-                new_user = CustomUser.objects.create_user(email, password)
+#             try:
+#                 new_user = CustomUser.objects.create_user(email, password)
 
-                auth_user = authenticate(email=email, password=password)
+#                 auth_user = authenticate(email=email, password=password)
 
-                login(request, auth_user)
+#                 login(request, auth_user)
 
-                return HttpResponseRedirect('/')
+#                 return HttpResponseRedirect('/')
 
-            except IntegrityError, e:
-                context['valid'] = "A User With That Name Already Exists"
-        else:
-            context['valid'] = form.errors
+#             except IntegrityError, e:
+#                 context['valid'] = "A User With That Name Already Exists"
+#         else:
+#             context['valid'] = form.errors
 
-    return render_to_response('signup.html', context, context_instance=RequestContext(request))
-
-
-def login_view(request):
-
-    context = {}
-
-    context['form'] = UserLogin()
-
-    #username = request.POST.get('username', None)
-    #password = request.POST.get('password', None)
-
-    #auth_user = authenticate(email=email, password=password)
-
-    if request.method == 'POST': 
-        form = UserLogin(request.POST)
-        if form.is_valid():
-            email = form.cleaned_data['email']
-            password = form.cleaned_data ['[password']
-
-            auth_user = authenticate(email=email, password=password)
-
-            if auth_user is not None:
-                login(request, auth_user)
-
-            return HttpResponseRedirect('/')
-        else:
-            context['valid'] = "Invalid User"
-    else:
-        context['valid'] = "Please enter a User Name"
-    return render_to_response('login.html', context, context_instance=RequestContext(request))
+#     return render_to_response('signup.html', context, context_instance=RequestContext(request))
 
 
-def logout_view(request):
-    logout(request)
+# def login_view(request):
 
-    return HttpResponseRedirect('/')
+#     context = {}
+
+#     context['form'] = UserLogin()
+
+#     #username = request.POST.get('username', None)
+#     #password = request.POST.get('password', None)
+
+#     #auth_user = authenticate(email=email, password=password)
+
+#     if request.method == 'POST': 
+#         form = UserLogin(request.POST)
+#         if form.is_valid():
+#             email = form.cleaned_data['email']
+#             password = form.cleaned_data ['[password']
+
+#             auth_user = authenticate(email=email, password=password)
+
+#             if auth_user is not None:
+#                 login(request, auth_user)
+
+#             return HttpResponseRedirect('/')
+#         else:
+#             context['valid'] = "Invalid User"
+#     else:
+#         context['valid'] = "Please enter a User Name"
+#     return render_to_response('login.html', context, context_instance=RequestContext(request))
+
+
+# def logout_view(request):
+#     logout(request)
+
+#     return HttpResponseRedirect('/')
 
 
 

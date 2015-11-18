@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Ajax State List</title>
+    <style>
+
+    li{
+        list-style-type: none;
+    }
+    </style>
+
+</head>
+<body>
+
+
+<ul id="state-list">
+    <li>States</li>
+    
+</ul>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+
+{% verbatim %}
+<script id="simple-template" type="text/x-handlebars-template">
+
+    {{#each states}}
+    <h2> {{name}} - {{abbrev}} <img src="{{map}}" height='100' width='100' /></h2>
+    {{/each}}
+</script>
+{% endverbatim %}
+
+
+
+<script type="text/javascript">
+    
+    $(function(){
+        console.log('something');
+
+        // insertion point
+        var stateList = $('#state-list');
+
+        // the template
+        var rawTemplate = $('#simple-template').html();
+
+
+        //compiled template
+        var template = Handlebars.compile(rawTemplate);
+
+
+
+        $("#state-list").append("<li>extra element</li>");
+
+        $.ajax({
+            type: 'GET', 
+            url: '/api_state_list/',
+            data: {},
+            success: function(data){
+                //console.log(data);
+
+                html_template = template(data)
+                stateList.html(html_template)
+
+                // //for(key in data ){
+                //     console.log(data[key]);
+                //     for(i=0; i < data[key].length; i++){
+
+                //             console.log(data[key][i]);
+                //             $('#state-list').append('<li>' + data[key][i]['name'] + ' '  + data[key][i]['abbrev'] +  ' ' + '<br>' +'<img src=' + data[key][i]['state_map'] + 'height="100" width="100" />' + '</li>')
+                //     }
+                // }
+
+            }
+
+        })
+
+
+    });
+
+  
+
+    //   #$(document).ready(function(){
+    //     console.log('something');
+
+    //     $("#state-list").append("<li>extra element</li>");
+
+
+    // });
+
+</script>
+
+</body>
+</html>

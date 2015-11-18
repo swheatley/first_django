@@ -1,0 +1,34 @@
+SELECT
+    main_city.id,
+    main_city.name, 
+    main_city.county, 
+    main_city.state_id, 
+    main_city.latitude, 
+    main_city.longitude 
+
+FROM 
+    main_city 
+WHERE 
+    main_city.name 
+LIKE BINARY 
+    '%H%';
+
+
+----------------------------------------
+
+SELECT 
+    main_city.id, 
+    main_city.name, 
+    main_city.county, 
+    main_city.state_id, 
+    main_city.latitude, 
+    main_city.longitude 
+FROM 
+    main_city 
+INNER JOIN 
+    main_state 
+ON 
+( main_city.state_id = main_state.id )
+ WHERE 
+    main_state.name 
+LIKE BINARY 'Ala%'

@@ -1,0 +1,14 @@
+{%load staticfiles%}
+
+<html>
+    <head>
+        <title>Test</title>
+    </head>
+    <body>
+        <ol>
+            {% for cities in city_list_cas %}
+            <li>{{ cities.name }}</li>
+            {% endfor %}
+        </ol>
+    </body>
+</html>

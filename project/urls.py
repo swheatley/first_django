@@ -18,12 +18,19 @@ from django.contrib import admin
 from django.conf import settings  
 from django.conf.urls.static import static
 
-from main.forms import CustomUserCreationForm
+
 from django.contrib.auth import views as auth_views
 from main import views
 
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^vote/(?P<pk>\d+)/$', 'main.views.vote'),
+
+    url(r'^api_state_list/$', 'main.views.api_state_list'),
+    url(r'^ajax_state_list/$', 'main.views.ajax_state_list'),
+
+    url(r'^api_city_list/$', 'main.views.api_city_list'),
+    url(r'^ajax_city_list/$', 'main.views.ajax_city_list'),
 
     
     url(r'^$', 'main.views.state_list'),
@@ -51,16 +58,21 @@ urlpatterns = [
     #url(r'StateCapital_delete/$). 'main.views.stateCapital_delete'),
     
     
-    url(r'^contact_view/$', 'main.views.contact_view'),
-    url(r'^signup/$', 'main.views.signup'),
-    url(r'^login/$', 'main.views.login_view'),
-    url(r'^logout_view/$', 'main.views.logout_view'),
-    #url(r'^register/$', CreateView)
+    # #url(r'^contact_view/$', 'main.views.contact_view'),
+    # url(r'^signup/$', 'main.views.signup'),
+    # url(r'^login/$', 'main.views.login_view'),
+    # url(r'^logout_view/$', 'main.views.logout_view'),
+    # #url(r'^register/$', CreateView)
    
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),
 
     url(r'^ajax_search/$', 'main.views.ajax_search'),
+    url(r'^ajax_vote/$', 'main.views.ajax_vote'),
     url(r'^json_response/$', 'main.views.json_response'),
+
+    url(r'^city_cas_list/$', 'main.views.city_list_cas'),
+
+
     
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

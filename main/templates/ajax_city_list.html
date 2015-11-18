@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>City List View</title>
+</head>
+<body>
+
+
+<ul id="city-list">
+    <li>test element</li>
+    
+</ul>
+
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+<script type"text/javascript">   
+
+$(function(){
+    console.log('boo!!!');
+
+    $("#city-list").append("<li>extra element</li>");
+
+  $.ajax({
+        type: 'GET',
+        url: '/api_city_list/'
+        data: {},
+        success: function(data)
+
+            for key(in data){
+                console.log(data[key]);
+                for(i=0; i < data[key].length; i++{
+
+                    console.log(data[key][i]);
+                    $().append();
+                })
+            }
+
+
+
+
+
+
+    });
+
+
+
+
+</script>
+    
+</body>
+</html>

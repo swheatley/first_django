@@ -14,12 +14,14 @@
                     </h2>
                     <hr>
                 </div>
-
+            <div class="vote">
                 {% for state in states %}
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                     <div class="row">
                        
                             <h2>State: <a href="/state_search/">{{ state.name }}</a></h2>
+                                <a href="/vote/{{state.pk}}/?vote_type=up">Vote Up ({{state.upvotes.all.count}} )</a> |
+                                <a href="/vote/{{state.pk}}/?vote_type=down">Vote Down ({{state.downvotes.all.count}})</a>
                             <h2>Cities: <a href="/city_search/{{ state.pk }}/" class="btn btn-default btn-lg" type="submit"> SELECT</a></h2>
                             <h2>Capital: <a href="/StateCapital_list/">{{ state.statecapital }}</a></h2>
                        
@@ -27,13 +29,117 @@
                     <br>
                         <a href="/StateCapital_detail/{{ state.statecapital.pk }}" class="btn btn-default btn-lg">Map</a>
                     <hr>
-                    
+                    <div id="state_list" class="col-lg-12 text-center"></div>
+
                 </div>
+
                 {% endfor %}
+            </div>
             </div>
         </div>
 
     </div>
+
+<script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js'></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/handlebars.js/2.0.0/handlebars.js"></script>
+
+{% verbatim %}
+<script id="simple-template" type="text/x-handlebars-template">
+
+    {{#each states}}
+    <h2> {{name}} 
+            {{#if votes}} 
+                Score:( {{votes}} ) 
+            {{else}} 
+                (0) 
+            {{/if}}
+        <a href=/"vote/{{pk}}/?vote_type=up">Vote Up</a>
+
+        <br>
+        <small>{{capital}}</small>
+    </h2>
+
+
+    <p>
+        {{#each cities}}
+         <a href="/city_detail/{{pk}}">
+
+            {{#if @last}}
+                {{name}}
+            {{else}}
+                {{name}},
+            {{/if}}
+        </a>
+   
+    
+     {{/each}}
+
+    </p>
+
+    {{/each}}
+</script>
+
+{% endverbatim %}
+
+
+
+<script>
+    
+    $(function(){
+        console.log('something');
+
+        // insertion point
+        var stateList = $('#state-list');
+
+        // the template
+        var rawTemplate = $('#simple-template').html();
+
+
+        //compiled template
+        var template = Handlebars.compile(rawTemplate);
+
+
+
+        $("#state-list").append("<li>extra element</li>");
+
+        $.ajax({
+            type: 'GET', 
+            url: '/api_state_list/',
+            data: {},
+            success: function(data){
+                //console.log(data);
+
+                html_template = template(data)
+                stateList.html(html_template)
+
+                // //for(key in data ){
+                //     console.log(data[key]);
+                //     for(i=0; i < data[key].length; i++){
+
+                //             console.log(data[key][i]);
+                //             $('#state-list').append('<li>' + data[key][i]['name'] + ' '  + data[key][i]['abbrev'] +  ' ' + '<br>' +'<img src=' + data[key][i]['map'] + 'height="100" width="100" />' + '</li>')
+                //     }
+                // }
+
+            }
+
+        })
+
+
+    });
+
+  
+
+    //   #$(document).ready(function(){
+    //     console.log('something');
+
+    //     $("#state-list").append("<li>extra element</li>");
+
+
+    // });
+
+</script>
+
 {% endblock %}
 
 

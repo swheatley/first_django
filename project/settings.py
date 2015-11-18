@@ -15,7 +15,7 @@ import os
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-AUTH_USER_MODEL = 'main.CustomUser'
+#AUTH_USER_MODEL = 'main.CustomUser'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
@@ -42,6 +42,8 @@ INSTALLED_APPS = (
     'crispy_forms',
     'main',
  )
+INSTALLED_APPS = ('django_cassandra_engine',) + INSTALLED_APPS
+
 CRISPY_TEMPLATE_PACK = 'bootstrap3'   
 
 MIDDLEWARE_CLASSES = (
@@ -83,8 +85,23 @@ DATABASES = {
         'NAME': 'first_django',
         'HOST': '127.0.0.1',
         'USER': 'root',
-        'PASSWORD':'1jjackson!',
-        'PORT':''
+        'PASSWORD': '1jjackson!',
+        'PORT': ''
+    },
+    'cassandra': {
+        'ENGINE': 'django_cassandra_engine',
+        'NAME': 'first_django',
+        'TEST_NAME': 'first_django',
+        'HOST': '127.0.0.1',
+        'OPTIONS': {
+            'replication': {
+                'strategy_class': 'SimpleStrategy',
+                'replication_factor': 1 
+            }
+
+        }
+
+
     }
 }
 

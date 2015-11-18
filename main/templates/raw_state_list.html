@@ -1,0 +1,49 @@
+{% extends "base.html"%}
+{% load staticfiles %}
+
+
+
+
+{% block body %}
+    <div class="container">
+            <div class="box">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                    <hr>
+                    <h2 class="intro-text text-center">
+                        <strong>State Details</strong>
+                    </h2>
+                    <hr>
+                </div>
+            <div class="vote">
+                {% for state in states %}
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                    <div class="row">
+                       
+                            <h2>State: <a href="/state_search/">{{ state.name }}</a></h2>
+                                <a href="/vote/{{state.pk}}/?vote_type=up">Vote Up ({{state.upvotes.all.count}} )</a> |
+                                <a href="/vote/{{state.pk}}/?vote_type=down">Vote Down ({{state.downvotes.all.count}})</a>
+                            <h2>Cities: <a href="/city_search/{{ state.pk }}/" class="btn btn-default btn-lg" type="submit"> SELECT</a></h2>
+                            <h2>Capital: <a href="/StateCapital_list/">{{ state.statecapital }}</a></h2>
+                       
+                    <br>
+                    <br>
+                        <a href="/StateCapital_detail/{{ state.statecapital.pk }}" class="btn btn-default btn-lg">Map</a>
+                    <hr>
+                    
+                </div>
+                {% endfor %}
+            </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+
+
+
+
+
+
+
+        

@@ -3,6 +3,7 @@
 import csv
 import sys
 import os
+
 sys.path.append('..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
@@ -17,7 +18,7 @@ from main.models import State, StateCapital
 print os.path.abspath(__file__)
 
 # print os.path.dirname(os.path.abspath(__file__))
-dir_name = os.path.dirname(os.path.abspath(__file__) )
+dir_name = os.path.dirname(os.path.abspath(__file__))
 file_name = "states.csv"
 
 # print "%s/%s" % (dir_name, file_name)
