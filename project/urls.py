@@ -58,7 +58,7 @@ urlpatterns = [
     #url(r'StateCapital_delete/$). 'main.views.stateCapital_delete'),
     
     
-    # #url(r'^contact_view/$', 'main.views.contact_view'),
+    url(r'^contact_view/$', 'main.views.contact_view'),
     # url(r'^signup/$', 'main.views.signup'),
     # url(r'^login/$', 'main.views.login_view'),
     # url(r'^logout_view/$', 'main.views.logout_view'),
@@ -67,12 +67,12 @@ urlpatterns = [
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),
 
-    url(r'^ajax_search/$', 'main.views.ajax_search'),
-    url(r'^ajax_vote/$', 'main.views.ajax_vote'),
+    url(r'^ajax_search/$', 'main.views.ajaxot_search'),
+    url(r'^ajax_vote/$', 'main.views.ajax_ve'),
     url(r'^json_response/$', 'main.views.json_response'),
 
     url(r'^city_cas_list/$', 'main.views.city_list_cas'),
 
 
     
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

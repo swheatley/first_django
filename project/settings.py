@@ -85,24 +85,24 @@ DATABASES = {
         'NAME': 'first_django',
         'HOST': '127.0.0.1',
         'USER': 'root',
-        'PASSWORD': '1jjackson!',
+        'PASSWORD': 'root',
         'PORT': ''
-    },
-    'cassandra': {
-        'ENGINE': 'django_cassandra_engine',
-        'NAME': 'first_django',
-        'TEST_NAME': 'first_django',
-        'HOST': '127.0.0.1',
-        'OPTIONS': {
-            'replication': {
-                'strategy_class': 'SimpleStrategy',
-                'replication_factor': 1 
-            }
-
-        }
-
-
     }
+    # #'cassandra': {
+    #     'ENGINE': 'django_cassandra_engine',
+    #     'NAME': 'first_django',
+    #     'TEST_NAME': 'first_django',
+    #     'HOST': '127.0.0.1',
+    #     'OPTIONS': {
+    #         'replication': {
+    #             'strategy_class': 'SimpleStrategy',
+    #             'replication_factor': 1 
+    #         }
+
+    #     }
+
+
+    
 }
 
 # Internationalization

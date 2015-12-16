@@ -433,6 +433,7 @@ def stateCapital_edit(request):
 
 # CONTACT VIEW:
 
+
 def contact_view(request):
     
     context = {}
