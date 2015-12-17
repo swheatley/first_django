@@ -4,14 +4,14 @@ from django.contrib.auth.models import User
 
 from django.db.models.signals import m2m_changed
 
-import uuid
-from cassandra.cqlengine import columns
-from cassandra.cqlengine.models import Model
+# import uuid
+# from cassandra.cqlengine import columns
+# from cassandra.cqlengine.models import Model
 
 
-class CityCas(models.Model):
-    state = columns.Text(required=False, primary_key=True)
-    name = columns.Text(required=False)  
+# #class CityCas(models.Model):
+#     state = columns.Text(required=False, primary_key=True)
+#     name = columns.Text(required=False)  
 
 
 class UserProfile(models.Model):

@@ -67,11 +67,11 @@ urlpatterns = [
     #url(r'^blog/$', 'main.views.blog.html'),
     #url(r'^base/$', 'main.views.base.html'),
 
-    url(r'^ajax_search/$', 'main.views.ajaxot_search'),
-    url(r'^ajax_vote/$', 'main.views.ajax_ve'),
+    url(r'^ajax_search/$', 'main.views.ajax_search'),
+    url(r'^ajax_vote/$', 'main.views.ajax_vote'),
     url(r'^json_response/$', 'main.views.json_response'),
 
-    url(r'^city_cas_list/$', 'main.views.city_list_cas'),
+    # url(r'^city_cas_list/$', 'main.views.city_list_cas'),
 
 
     

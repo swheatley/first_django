@@ -1,7 +1,7 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
-from main.models import State, City, StateCapital, CityCas
+from main.models import State, City, StateCapital
 from main.forms import ContactForm, CityEditForm, CityEditForm
 
 from django.template import RequestContext

@@ -8,9 +8,6 @@ class StateCapitalAdmin(admin.ModelAdmin):
     search_fields = ('name',)
 
 
-#class StateCapitalInLine(admin.TabularInline):
-#    model = StateCapital.state.through
-
 
 class StateAdmin(admin.ModelAdmin):
         list_display = ('name', 'abbrev')
