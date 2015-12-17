@@ -1,26 +1,23 @@
 from django.shortcuts import render, render_to_response
 from django.http import HttpResponse, HttpResponseRedirect, JsonResponse
 
-from main.models import State, City, StateCapital
-from main.forms import ContactForm, CityEditForm, CityEditForm
+from main.models import State, City, StateCapital # CityCas
+from main.forms import ContactForm, CityEditForm, CityEditForm, UserLogin
 
 from django.template import RequestContext
 from django.core.mail import send_mail
 from django.conf import settings
 
 from django.contrib.auth.models import User
+from django.contrib.auth import login, logout, authenticate
 import string
 
-
-
-
-#list views
+#list view
 #detail views
 #create view
 #edit view
 #delete view
 #make the view --> make the url
-
 
 
 def city_list_cas(request):
@@ -32,8 +29,6 @@ def city_list_cas(request):
     context['city_list'] = city_list
 
     return render_to_response('city_list_cas.html', context, context_instance=RequestContext(request))
-
-
 
 
 def api_city_list(request):
@@ -177,7 +172,6 @@ def state_search(request):
     #tate = request.POST.get('state', None)
 
     #states = State.objects.filter(name__icontains=state)
-
 
     print state
     if state != None:
@@ -535,41 +529,41 @@ def contact_view(request):
 
 #     return render_to_response('signup.html', context, context_instance=RequestContext(request))
 
+def login_view(request):
 
-# def login_view(request):
+    context = {}
 
-#     context = {}
+    context['form'] = UserLogin()
 
-#     context['form'] = UserLogin()
+    username = request.POST.get('username', None)
+    password = request.POST.get('password', None)
+    email = request.POST.get('email', None)
 
-#     #username = request.POST.get('username', None)
-#     #password = request.POST.get('password', None)
+    auth_user = authenticate(email=email, password=password)
 
-#     #auth_user = authenticate(email=email, password=password)
+    if request.method == 'POST': 
+        form = UserLogin(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
 
-#     if request.method == 'POST': 
-#         form = UserLogin(request.POST)
-#         if form.is_valid():
-#             email = form.cleaned_data['email']
-#             password = form.cleaned_data ['[password']
+            auth_user = authenticate(email=email, password=password)
 
-#             auth_user = authenticate(email=email, password=password)
+            if auth_user is not None:
+                login(request, auth_user)
 
-#             if auth_user is not None:
-#                 login(request, auth_user)
-
-#             return HttpResponseRedirect('/')
-#         else:
-#             context['valid'] = "Invalid User"
-#     else:
-#         context['valid'] = "Please enter a User Name"
-#     return render_to_response('login.html', context, context_instance=RequestContext(request))
+            return HttpResponseRedirect('/')
+        else:
+            context['valid'] = "Invalid User"
+    else:
+        context['valid'] = "Please enter a User Name"
+    return render_to_response('login.html', context, context_instance=RequestContext(request))
 
 
-# def logout_view(request):
-#     logout(request)
+def logout_view(request):
+    logout(request)
 
-#     return HttpResponseRedirect('/')
+    return HttpResponseRedirect('/')
 
 
 

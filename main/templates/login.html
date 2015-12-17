@@ -10,7 +10,7 @@
 
     
     {% if request.user.is_anonymous %}
-        <form method="post" action="{% url 'login_view' %}">
+        <form method="post" action="/login/">
             {% csrf_token %}
 
             <table>

@@ -60,7 +60,7 @@ urlpatterns = [
     
     url(r'^contact_view/$', 'main.views.contact_view'),
     # url(r'^signup/$', 'main.views.signup'),
-    # url(r'^login/$', 'main.views.login_view'),
+    url(r'^login/$', 'main.views.login_view'),
     # url(r'^logout_view/$', 'main.views.logout_view'),
     # #url(r'^register/$', CreateView)
    

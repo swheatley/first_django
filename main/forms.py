@@ -84,7 +84,6 @@ class CityEditForm(forms.ModelForm):
 #     email = forms.CharField(required=True)
 #     password = forms.CharField(widget=forms.PasswordInput(), required=True)
 
-
-# class UserLogin(forms.Form):
-#     email = forms.CharField(required=True)
-#     password = forms.CharField(required=True, widget=forms.PasswordInput())
+class UserLogin(forms.Form):
+    email = forms.CharField(required=True)
+    password = forms.CharField(required=True, widget=forms.PasswordInput())
