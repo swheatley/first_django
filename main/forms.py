@@ -79,10 +79,11 @@ class CityEditForm(forms.ModelForm):
 #         exlcude = ['username']
 
 
-# class UserSignUp(forms.Form):
-#     name = forms.CharField(required=True)
-#     email = forms.CharField(required=True)
-#     password = forms.CharField(widget=forms.PasswordInput(), required=True)
+class UserSignUp(forms.Form):
+    name = forms.CharField(required=True)
+    email = forms.CharField(required=True)
+    password = forms.CharField(widget=forms.PasswordInput(), required=True)
+
 
 class UserLogin(forms.Form):
     email = forms.CharField(required=True)

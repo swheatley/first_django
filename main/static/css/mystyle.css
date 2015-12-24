@@ -27,3 +27,6 @@ li{
 .city_name h2{
     text-shadow: 2px 2px #000000;
 }
+.navbar-nav > li > a{
+       margin: 40px; 
+}
