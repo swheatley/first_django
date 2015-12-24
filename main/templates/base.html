@@ -15,13 +15,14 @@
     <title>Django ( USA ) States</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <!--<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>-->
     {# <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet"> #}
 
     <!-- Custom CSS -->
     <link href="{% static 'css/business-casual.css' %}" rel="stylesheet">
 
     <link href="{% static 'css/bootstrap.css' %}" rel="stylesheet">
+   
 
     <link href="{% static 'css/mystyle.css' %}" rel="stylesheet">
 
@@ -52,31 +53,37 @@
                         <span class="icon-bar">Login</span>
                     </button>
                 </div>
-                        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-4">
-                            <ul class="nav navbar-nav">
-                                <li>
-                                    <a href="/state_list/">State Info</a>
-                                </li>
-                                <li>
-                                    <a href="/StateCapital_list/">State Capital</a>
-                                </li>
-                                <li>
-                                    <a href="/state_search/">State Search</a>
-                                </li>
-                                <li>
-                                    <a href="/contact_view/">contact</a>
-                                </li>
-                                <li>
-                                    <a href="/login/">Login</a>
-                                </li>
-                                <li>
-                                    <a href="/">Logout</a>
-                                </li>
-                            </ul>
-                        </div>
                 </div>
-            </div>
-        </div>         
+
+                        <div class="collapse navbar-collapse">
+                            <div class="row">
+                                <ul class="nav navbar-nav">
+
+                                    <li>
+                                        <a href="/">State Info</a>
+                                    </li>
+                                    <li>
+                                        <a href="/StateCapital_list/">State Capital</a>
+                                    </li>
+                                    <li>
+                                        <a href="/state_search/">State Search</a>
+                                    </li>
+                                    <li>
+                                        <a href="/contact_view/">contact</a>
+                                    </li>
+                                    <li>
+                                        <a href="/login/">Login</a>
+                                    </li>
+                                    <li>
+                                        <a href="/">Logout</a>
+                                    </li>
+                                   
+                                </ul>
+                            </div>
+                        </div>
+             
+        </div> 
+    </div>        
     </nav>
 {% block body%}
 

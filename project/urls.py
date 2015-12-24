@@ -34,7 +34,7 @@ urlpatterns = [
 
     
     url(r'^$', 'main.views.state_list'),
-    url(r'^state_list/$', 'main.views.state_list'),
+    url(r'^$', 'main.views.state_list'),
     url(r'^state_search/$', 'main.views.state_search'),
     url(r'^state_create/$', 'main.views.state_create'),
     url(r'^state_detail/(?P<pk>\d+)/$', 'main.views.state_detail'),
