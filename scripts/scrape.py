@@ -2,6 +2,7 @@
 
 import urllib
 import urllib2
+
 from lxml import etree
 import StringIO
 import re, sys, os
@@ -65,8 +66,6 @@ for link in links:
     # print state_population_string
     state_population_pattern = "(.+)"
     cleaned_pop_string = re.search(state_population_pattern, '%s' % state_population_string)
-
-    
 
     try:
         # print cleaned_pop_string.group()
