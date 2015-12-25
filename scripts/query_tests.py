@@ -67,8 +67,8 @@ print state.capital_set.all()
 
 try:
         state_obj = State.objects.get(abbreviation=row['state'])
-    except:
-        print row['state']
+except:
+    print row['state']
 
     new_city, created = City.objects.get_or_create(name=row['city'], state=state_obj)
     new_city.county = row['county']
