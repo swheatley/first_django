@@ -4,13 +4,15 @@ import csv
 import sys
 import os
 
+from main.models import State, StateCapital
 
 sys.path.append('..')
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
+
 import django
 django.setup()
 
-from main.models import State, StateCapital
+
 
 #state = State.objects.all().order_by('-pop')
 #for state in states:
