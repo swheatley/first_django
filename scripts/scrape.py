@@ -11,7 +11,7 @@ from PIL import Image
 
 sys.path.append("..")
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_states.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
 from main.models import State, StateCapital
 from django.core.files import File
