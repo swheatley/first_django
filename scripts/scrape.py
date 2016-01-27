@@ -57,7 +57,7 @@ for link in links:
     state_map_image_xpath = '/html/body/img/@src'
     state_map_image = tree.xpath(state_map_image_xpath)
 
-    url = 'http://quickfacts.census.gov%s' % state_map_image[0]
+    url = 'http://quickfacts.census.gov%s' % state_map_image
     image_response = urllib2.urlopen(url).read()
 
     img_temp = NamedTemporaryFile(delete=True)
