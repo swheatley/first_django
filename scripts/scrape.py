@@ -46,9 +46,9 @@ for link in links:
 
     state_population_string = tree.xpath(state_population_xpath)
 
-    #how can I clean up this string so the regex is more simple?
-    #['735,132; Rank: 47 of 50 | ', '\r\n\r\n']
-    #look at strip and replace to clean up this string
+    # how can I clean up this string so the regex is more simple?
+    # ['735,132; Rank: 47 of 50 | ', '\r\n\r\n']
+    # look at strip and replace to clean up this string
     # print state_population_string
     state_population_pattern = "\d+,\d+,\d+"
     cleaned_pop_string = re.search(state_population_pattern, '%s' % state_population_string)
