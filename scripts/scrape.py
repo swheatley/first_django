@@ -4,7 +4,7 @@ import urllib2
 from lxml import etree
 import StringIO
 import re, sys, os
-import requests
+# import request
 from PIL import Image
 
 
