@@ -30,14 +30,13 @@ filtered_html = tree.xpath(href_xpath)
 links = [link for link in filtered_html if 'htm' in link]
 
 for link in links:
-    print "loop"
-    state_name_pattern = "(?<=\W).*(?=.htm)"
-    state_name_search = re.search(state_name_pattern, link)
-    state_name = "%s" % state_name_search.group()
-    #use the xpath to the abbreviation to get the abbreviation
-    #use a get instead of a filter to find the state object
-    state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
-
+    # print "loop"
+    # state_name_pattern = "(?<=\W).*(?=.htm)"
+    # state_name_search = re.search(state_name_pattern, link)
+    # state_name = "%s" % state_name_search.group()
+    # use the xpath to the abbreviation to get the abbreviation
+    # use a get instead of a filter to find the state object
+    # state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
 
     state_page = urllib.urlopen("http://www.50states.com/%s" % link)
 
@@ -57,8 +56,8 @@ for link in links:
         
         
 
-#return int(value)
-#ValueError: invalid literal for int() with base 10: "['4,833,722; Rank: 23 of 50 | ']"
+# return int(value)
+# ValueError: invalid literal for int() with base 10: "['4,833,722; Rank: 23 of 50 | ']"
 
     # how can I clean up this string so the regex is more simple?
     # ['735,132; Rank: 47 of 50 | ', '\r\n\r\n']
@@ -97,9 +96,7 @@ for link in links:
     url = 'http://quickfacts.census.gov/%s' % state_map_image
 
     image_response = urllib2.urlopen(url).read()
-
     img_temp = NamedTemporaryFile(delete=True)
-
     img_temp.write(image_response)
 
     try:
