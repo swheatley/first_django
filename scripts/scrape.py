@@ -36,7 +36,7 @@ for link in links:
     # state_name = "%s" % state_name_search.group()
     # use the xpath to the abbreviation to get the abbreviation
     # use a get instead of a filter to find the state object
-    # state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
+    state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
 
     state_page = urllib.urlopen("http://www.50states.com/%s" % link)
 
