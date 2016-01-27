@@ -93,7 +93,7 @@ for link in links:
 
     state_map_image = tree.xpath(image_link_xpath)[0]
 
-    url = 'http://quickfacts.census.gov/%s' % state_map_image
+    url = 'http://quickfacts.census.gov/%s' % state_map_image[0]
 
     image_response = urllib2.urlopen(url).read()
 
