@@ -31,9 +31,9 @@ links = [link for link in filtered_html if 'htm' in link]
 
 for link in links:
     # print "loop"
-    # state_name_pattern = "(?<=\W).*(?=.htm)"
-    # state_name_search = re.search(state_name_pattern, link)
-    # state_name = "%s" % state_name_search.group()
+    state_name_pattern = "(?<=\W).*(?=.htm)"
+    state_name_search = re.search(state_name_pattern, link)
+    state_name = "%s" % state_name_search.group()
     # use the xpath to the abbreviation to get the abbreviation
     # use a get instead of a filter to find the state object
     state_object = State.objects.filter(name__icontains=state_name.strip('new').strip('nc').strip('wv')).first()
