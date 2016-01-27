@@ -1,184 +1,145 @@
-
-# !/usr/bin/env python
-
+#!/usr/bin/env python
 import urllib
 import urllib2
+from lxml import etree
 import StringIO
 import re, sys, os
-from lxml import etree
+import requests
+from PIL import Image
 
-sys.path.append('..')
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "project.settings")
 
+sys.path.append("..")
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "django_states.settings")
+
+from main.models import State, StateCapital
 from django.core.files import File
 from django.core.files.temp import NamedTemporaryFile
-from main.models import State
-#open
-result = urllib.urlopen('http://www.50states.com/')
-#read
+#result = urllib.urlopen("http://164.100.47.132/LssNew/Members/Alphabaticallist.aspx")
+
+result = urllib.urlopen("http://www.50states.com/")
+
 html = result.read()
 
 parser = etree.HTMLParser()
+tree   = etree.parse(StringIO.StringIO(html), parser)
 
-tree = etree.parse(StringIO.StringIO(html), parser)
+# xpath = "//table[@id='ctl00_ContPlaceHolderMain_Alphabaticallist1_dg1']/tr/td/img/@src"  #/child::text()
+
+# xpath1 = "//table[@id='Table2']/tr/td/a/child::text()"
+
+# xpath2 = "////table[@id='Table2']/tr/td/a/@href"
+
+xpath3 = "//*[@id='ar-full-homepage']/div/ul/li/a/@href"
 
 
-href_xpath = '//*[@id="ar-full-homepage"]/div/ul/li/a/@href'
+filtered_html3 = tree.xpath(xpath3)
 
-filtered_html = tree.xpath(href_xpath)
 
-link_list = []
+links = [html for html in filtered_html3 if 'htm' in html]
 
-# for link in filtered_html:
-#     if 'htm' in link:
-#         link_list.append(link)
-
-#print link_list
-#print '-'*10
-
-#Shorter version = list comprehension
-links = [link for link in filtered_html if 'htm' in link]
-#print links
+print links
 
 for link in links:
-    state_page = urllib.urlopen("http://www.50states.com/%s"% link)
-    #print state_page.read()
+    state_name_pattern = "(?<=\W)[^.]*(?=.htm)"
+
+    state_name_search = re.search(state_name_pattern, link)
+
+    state_name = "%s" % state_name_search.group()
+
+
+    print "#### %s #####" % state_name.strip('new')
+
+
+    try:
+        state_object, created = State.objects.get_or_create(name__icontains=state_name.strip('new'))
+    except:
+        state_object = State.objects.filter(name__icontains=state_name.strip('new')).first()
+
+    print created
+
+    #print "http://www.50states.com/%s" % link
+    state_page = urllib.urlopen("http://www.50states.com%s" % link)
+
+    state_page_html = state_page.read()
+
+    tree   = etree.parse(StringIO.StringIO(state_page_html), parser)
+
+    state_population_xpath = '//*[@id="collapseQuick-Facts"]/div/ul/li[6]/div/text()'
+
+    state_population_string = tree.xpath(state_population_xpath)
+    state_population_pattern = "([\d]+),([\d]+),([\d]+)"
+    cleaned_pop_string = re.search(state_population_pattern, "%s" % state_population_string)
+
+    try:
+        print cleaned_pop_string.group()
+        state_object.population = "%s" % cleaned_pop_string.group()
+        try:
+            state_object.save()
+        except:
+            print state_object.name
+    except AttributeError:
+        print "no groups"
+
+    state_map_link_xpath = '//*[@id="collapseGovernment"]/div/ul/li[2]/div/a/@href'
+    state_map_link = tree.xpath(state_map_link_xpath)
+
+
+    state_page = urllib.urlopen(state_map_link[0])
 
     state_page_html = state_page.read()
 
     tree = etree.parse(StringIO.StringIO(state_page_html), parser)
 
-    state_abbrev_xpath='//*[@id="content"]/div[1]/div[2]/div/div[1]/h1/text()'
-    state_abbrev_xpath_list=tree.xpath(state_abbrev_xpath)
-    #print state_abbrev_xpath_list
+    state_map_image_link = '/html/body/img/@src'
 
-    state_abbrev_string = state_abbrev_xpath_list[0]
-    state_abbrev = state_abbrev_string.split('(')[1].split(')')[0]
-    state_name = state_abbrev_string.split('(')[0].replace(" ", "")
+    state_map_image = tree.xpath(state_map_image_link)
 
 
-    state_nick_name_xpath= '//*[@id="collapseQuick-Facts"]/div/ul/li[5]/div/a/text()'
-    state_nick_name=tree.xpath(state_nick_name_xpath)[0]
+    print "STATE MAP IMAGE LINK %s" % 'http://quickfacts.census.gov%s' % state_map_image[0]
 
-    try:
-        state_bird_xpath='//*[@id="collapseFacts"]/div/ul/li[2]/div/text()'
-        state_bird_xpath_list = tree.xpath(state_bird_xpath)
-        state_bird = state_bird_xpath_list[0].replace(' |', '')
-    except Exception, e:
-        print e
-
-    state_statehood_date_xpath = '//*[@id="collapseQuick-Facts"]/div/ul/li[1]/div/a/text()'
-    state_statehood_date=tree.xpath(state_statehood_date_xpath)[0]
-    print state_statehood_date
-    state_statehood_num_xpath='//*[@id="collapseQuick-Facts"]/div/ul/li[1]/div/text()'
-    state_statehood_num = tree.xpath(state_statehood_num_xpath)[0].replace(' (', '').replace(')', '')
-    print state_statehood_num
-    state_statehood = state_statehood_date + ' | ' + state_statehood_num
-    print state_statehood
-
-#HELP?
-    state_flag_link_xpath = '//*[@id="content"]/div[1]/div[3]/div/a[2]/div/div/div[1]/img/@src'
-    #finds
-
-    try:
-
-        state_flag_link = tree.xpath(state_flag_link_xpath)[0]
-        print state_flag_link
-        url = 'http://www.50states.com/%s'%state_flag_link
-        image_response = urllib2.urlopen(url).read()
-
-        img_temp = NamedTemporaryFile(delete = True)
-
-        img_temp.write(image_response)
-        try:
-            state_object.flag.save('flag_image.gif', File(img_temp))
-        except Exception, e:
-            print e
-        
-
-    except Exception, e:
-        print e
-
-
-        
-
-    print state_name
-    #state_name_pattern = "(?<=\W).*(?=.htm)"
-    #state_name_search= re.search(state_name_pattern, link)
-    #state_name = '%s' % state_name_search.group()
-    #use the xpath to the abbrevation
-    #use a get instead of a filter to find the state object
-    state_object= State.objects.get(abbrev=state_abbrev)
-
-    state_population_xpath="//*[@id='collapseQuick-Facts']/div/ul/li[6]/div/text()"
-
-    state_population_xpath_list=tree.xpath(state_population_xpath)
-    # state_population_xpath_list
-    try: 
-        state_pop_string = (state_population_xpath_list)[0].replace(',', '').split(';')[0]
-        #print state_pop_string
-    except Exception, e:
-        print e
-
-    #no spaces in pattern
-    #how can I clean up the string so regex is more simple?
-    #['38,332,521; Rank: 1 of 50 | ', '\r\n']
-    #look at strip and replace to clean up string
-    # state_population_pattern = '\d+,\d+,\d+'
-    # cleaned_pop_string = re.search(state_population_pattern, '%s' % state_population_string)
-
-    #ALREADY CLEANED
-    try:
-        #print state_pop_string
-        state_object.pop = state_pop_string
-        state_object.nick_name = state_nick_name
-        state_object.bird = state_bird
-        state_object.statehood = state_statehood
-        print state_object.bird
-        state_object.save()
-    except AttributeError, e:
-        print e
-
-    #open page, read page, parse page
-    #get link
-    #clean up
-    state_map_link_xpath = '//*[@id="collapseGeography"]/div/ul/li[4]/div/a/@href'
-    #finds
-
-    try:
-
-        state_map_link = tree.xpath(state_map_link_xpath)[0]
-        #print state_map_link
-
-        
-
-    except Exception, e:
-        print e
-
-    state_map_page = urllib.urlopen(state_map_link)
-
-    state_map_page_html = state_map_page.read()
-
-    tree = etree.parse(StringIO.StringIO(state_map_page_html), parser)
-
-    image_link_xpath = '//*[@id="innerPage"]/img/@src'
-
-    state_map_image = tree.xpath(image_link_xpath)[0]
-
-
-    url = 'http://quickfacts.census.gov/%s' % state_map_image
-
+    url = 'http://quickfacts.census.gov%s' % state_map_image[0]
     image_response = urllib2.urlopen(url).read()
 
-    img_temp = NamedTemporaryFile(delete = True)
+    img_temp = NamedTemporaryFile(delete=True)
 
     img_temp.write(image_response)
-    try:
-        state_object.state_map.save('map_image.gif', File(img_temp))
-    except Exception, e:
-        print e
-#!/usr/bin/env python
+
+    state_object.state_map.save('tmpimage.gif', File(img_temp))
+
+        # img = StringIO.StringIO(image_response)
+        #img = Image.open(StringIO.StringIO(image_response.content))
+
+        # image_file = open('temp.gif', 'wb')
+
+        # for block in image_response.iter_content(1024):
+        #   image_file.write(block)
+
+
+
+    # image = urllib.URLopener()
+    
+    #   f = open(StringIO.StringIO(), 'wb')
+    #     f.write(chunk)
+    
+    #    = f
+    #   state_object.save()
+
+# ([\d{0,2}])(,\d{0,3})
+
+# ^([0-9]+,)*[0-9]+$
+
+
+
+# state_page_result = state_page.read()
+# for html in filtered_html3:
+#   # if '.html' in html:
+#   print html
+
+
+# print filtered_html3
+# !/usr/bin/env python
 
 # # import urllib
 # import urllib2
